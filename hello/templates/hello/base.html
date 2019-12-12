@@ -12,6 +12,13 @@
     <link rel="stylesheet" href="{% static 'hello/main.css' %}">
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <script type="text/javascript" src="{% static 'hello/allFunction.js' %}"></script>
+<!--    <script>-->
+<!--        function myFunction() {-->
+<!--            alert('HI');-->
+<!--        }-->
+<!--    </script>-->
 </head>
 <body>
 
@@ -29,8 +36,13 @@
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
-              <a class="nav-item nav-link" href="#">Login</a>
-              <a class="nav-item nav-link" href="#">Register</a>
+              {% if user.is_authenticated %}
+                  <a id="profile" class="nav-item nav-link" onclick="myFunction(this)"  href="{% url 'user_profile' %}">Profile</a>
+                  <a class="nav-item nav-link" href="{% url 'logout' %}">{{ user.username }}  Logout</a>
+              {% else %}
+                  <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                  <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -40,6 +52,13 @@
     <main role="main" class="container">
       <div class="row">
         <div class="col-md-8">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
           {% block content %}{% endblock %}
         </div>
         <div class="col-md-4">
